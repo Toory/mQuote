@@ -29,7 +29,7 @@ class TradeWidget(QWidget):
 		self.tab1 = QWidget()
 		self.tab2 = QWidget()
 		self.tabs.addTab(self.tab1,"Daily Stocks")
-		self.tabs.addTab(self.tab2,"Choose a Date")
+		self.tabs.addTab(self.tab2,"History")
 
 		# Add tab1 and tab2 UI
 		self.tab1UI()
