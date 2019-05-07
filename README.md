@@ -15,7 +15,7 @@ mQuote is an application that allows you to download daily and historical end-of
 
 ## Usage
 <p align="center"> 
-  <img src="https://i.imgur.com/vrrDqGD.gif">
+  <img src="https://i.imgur.com/cawiGvW.gif">
 </p>
 
 The stock's quotes that the application will download need to be written one per line in a file called 'stocks.txt'. 
