@@ -100,7 +100,6 @@ class TradeWidget(QWidget):
 		sender = self.sender()
 
 		if sender.text() == 'Get Daily Stocks!':
-			self.button1.
 			trade.Trade(1,self.text)
 			self.text.append('[+] Done!')
 		elif sender.text() == 'Get Stocks!':
