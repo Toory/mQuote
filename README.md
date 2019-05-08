@@ -10,6 +10,8 @@ mQuote is an application that allows you to download daily and historical end-of
 
 	git clone 'https://github.com/Toory/mQuote'
 	cd mQuote
+	virtualenv env
+	source ./env/bin/activate
 	pip install -r requirements.txt #Download all dependencies needed
 	python mquoteGUI.py
 
