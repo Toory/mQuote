@@ -8,12 +8,10 @@ import time
 import datetime
 import requests
 import argparse, textwrap
-from PyQt5.QtWidgets import QTextEdit, QApplication
-from PyQt5.QtCore import Qt
 
 class Trade():
 	
-	def __init__(self,choose,text=None,tempStart='',tempEnd=''):
+	def __init__(self,choose,helper=None,tempStart='',tempEnd=''):
 		with open("stocks.txt","r+") as f:
 			stocks = f.read().splitlines()  #splitlines to get line by line output from file
 		f.close()
@@ -29,9 +27,13 @@ class Trade():
 		#get the cookie and crumb for one stock, then uses the same cookie and crumb for all iterations
 		cookie, crumb = self.get_cookie_crumb('ENI.MI')
 		for stock in stocks:
-			self.show(stock,text)
+			self.show(stock,helper)
 			self.download_quotes(stock,counter,cookie,crumb,start_date,end_date)
 			counter += 1
+		if helper != None:
+			# emits data to the GUI through a signal
+			helper.send_signal.emit('[+] Done!')
+			helper.finished.emit()
 
 	def daily(self):
 		start_date = self.get_now_epoch()
@@ -115,13 +117,13 @@ class Trade():
 	def getformattedtoday(self):
 		return datetime.datetime.today().strftime('%Y%m%d')
 
-	def show(self,symbol,text):
+	def show(self,symbol,helper):
 		print("[+] Downloading %s !" % symbol)
 		#string = f"[+] Downloading {symbol} from {time.strftime('%Y/%m/%d', time.localtime(start_date))} to {time.strftime('%Y/%m/%d', time.localtime(end_date))}!"
-		if text != None:
+		if helper != None:
+			# emits data to the GUI through a signal
 			string = f"[+] Downloading {symbol}!"
-			text.append(string)
-			QApplication.processEvents()
+			helper.send_signal.emit(string)
 		return
 
 if __name__ == '__main__':
