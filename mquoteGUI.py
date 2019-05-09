@@ -1,8 +1,13 @@
 import trade
 import sys
 from PyQt5.QtWidgets import QMainWindow, QTextEdit, QWidget, QPushButton, QHBoxLayout,QLabel, QApplication, QVBoxLayout, QCalendarWidget, QTabWidget
-from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtCore import Qt, QDate, QProcess, QObject, pyqtSignal
 from PyQt5.QtGui import QIcon, QPixmap
+from threading import Thread
+
+class Helper(QObject):
+    send_signal = pyqtSignal(str)
+    finished = pyqtSignal()
 
 class TradeMainWindow(QMainWindow):
 
@@ -41,6 +46,7 @@ class TradeWidget(QWidget):
 		self.show()
 
 	def tab1UI(self):
+		self.helper = Helper()
 		self.button1 = QPushButton('Get Daily Stocks!')
 		self.text = QTextEdit()
 
@@ -100,15 +106,22 @@ class TradeWidget(QWidget):
 		sender = self.sender()
 
 		if sender.text() == 'Get Daily Stocks!':
-			trade.Trade(1,self.text)
-			self.text.append('[+] Done!')
+			self.button1.setEnabled(False)
+			thread = Thread(target=trade.Trade, args=(1,self.helper))
 		elif sender.text() == 'Get Stocks!':
+			self.button5.setEnabled(False)
 			StartDate = self.label1.text()
 			EndDate = self.label2.text()
-			trade.Trade(2,self.text2,StartDate,EndDate)
-			self.text2.append('[+] Done!')
+			thread = Thread(target=trade.Trade, args=(2,self.helper,StartDate,EndDate))
 		else:
-			pass
+			return
+		self.helper.send_signal.connect(self.text.append,Qt.QueuedConnection)
+		self.helper.finished.connect(self.finished)
+		thread.start()
+
+	def finished(self):
+		self.button1.setEnabled(True)
+		self.button5.setEnabled(True)
 
 	def Calendar(self):
 		sender = self.sender()
