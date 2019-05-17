@@ -9,7 +9,7 @@ mQuote is an application that allows you to download daily and historical end-of
 ## Installation
 
 	git clone 'https://github.com/Toory/mQuote'
-	cd mQuote
+	cd mQuote/src/
 	virtualenv env
 	source ./env/bin/activate
 	pip install -r requirements.txt #Download all dependencies needed
